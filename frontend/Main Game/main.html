@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="SOLARIAS - Terminal-style dungeon exploration game">
+    <title>SOLARIAS - Find The Sun</title>
+    <link rel="stylesheet" href="main.css">
+    <script src="main.js" defer></script>
+</head>
+<body>
+    <audio id="ambienceAudio" loop>
+        <source src="../assets/ambience.mp3" type="audio/mpeg">
+    </audio>
+    <main id="mainContainer" role="main">
+        <div id="displayContainer">
+            <!-- Left panel: Game narrative and descriptions -->
+            <aside id="descriptionPanel" role="complementary" aria-label="Game description">
+                <div class="panel-content"></div>
+            </aside>
+            
+            <!-- Center panel: Visual display area -->
+            <section id="viewPanel" role="region" aria-label="Game view">
+                <div class="view-content">
+                    <img src="../assets/Ascii Corridor.PNG" alt="ASCII Corridor View" class="view-image">
+                </div>
+            </section>
+            
+            <!-- Right panel: Player info and map -->
+            <aside id="extraContainer" role="complementary" aria-label="Player information">
+                <div id="playerPanel" class="info-panel">
+                    <h2 class="panel-title">Player</h2>
+                    <div id="playerName" class="player-info"></div>
+                </div>
+                <div id="mapPanel" class="info-panel">
+                    <h2 class="panel-title">Map</h2>
+                    <div class="map-content"></div>
+                </div>
+            </aside>
+            
+            <!-- Command input area -->
+            <div id="promptBoxContainer" role="search" aria-label="Command input">
+                <button id="typeSelect" type="button" aria-label="Toggle command type"></button>
+                <input id="promptBox" type="text" placeholder="Enter command..." aria-label="Command input" autocomplete="off">
+            </div>
+        </div>
+    </main>
+</body>
+</html>

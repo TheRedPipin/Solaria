@@ -1,0 +1,112 @@
+.skull-container {
+	display: flex;
+	justify-content: center;
+	margin-top: 40px;
+	margin-bottom: 10px;
+}
+.skull-img {
+	width: 180px;
+	height: auto;
+	opacity: 0.85;
+	filter: drop-shadow(0 0 8px #00ff00);
+}
+
+.terminal-ui {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	min-height: 100vh;
+	width: 100vw;
+}
+
+.title-container {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	min-height: 5.5em;
+}
+
+.game-title {
+	font-family: var(--terminal-font);
+	color: var(--terminal-green);
+	font-size: 2.8em;
+	font-weight: normal;
+	letter-spacing: 0.08em;
+	text-shadow: 0 0 8px var(--terminal-green), 0 0 2px var(--terminal-green-dim);
+	margin-bottom: 0.2em;
+	text-align: center;
+}
+.caret {
+	animation: blink 1s steps(1) infinite;
+	border-right: 0.15em solid #00ff00;
+	margin-left: 0.1em;
+}
+@keyframes blink {
+	0%, 100% { opacity: 1; }
+	50% { opacity: 0; }
+}
+.sub {
+	font-family: 'Fira Mono', 'Consolas', monospace;
+	color: var(--terminal-green);
+	font-size: 1.2em;
+	letter-spacing: 0.05em;
+	text-shadow: 0 0 4px var(--terminal-green);
+	margin-top: 0.5em;
+	text-align: center;
+}
+
+:root {
+	--terminal-green: #00ff00;
+	--terminal-green-dim: #003300;
+	--terminal-green-glow: rgba(0, 255, 0, 0.3);
+	--terminal-bg: #000;
+	--terminal-font: 'VT323', 'Fira Mono', 'Consolas', monospace;
+}
+
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+body, html {
+	width: 100%;
+	height: 100%;
+	background-color: var(--terminal-bg);
+	background-image: repeating-linear-gradient(
+		to right,
+		rgba(0, 255, 0, 0.08) 0px,
+		rgba(0, 255, 0, 0.08) 2px,
+		transparent 2px,
+		transparent 32px
+	);
+	color: var(--terminal-green);
+	font-family: var(--terminal-font);
+	overflow: hidden;
+	/* Subtle CRT effect */
+	animation: flicker 0.15s infinite;
+}
+
+@keyframes flicker {
+	0%, 100% { opacity: 1; }
+	50% { opacity: 0.98; }
+}
+.loading-bar {
+	font-family: 'Fira Mono', 'Consolas', monospace;
+	color: var(--terminal-green);
+	font-size: 1.4em;
+	text-align: center;
+	margin-bottom: 1em;
+	text-shadow: 0 0 4px var(--terminal-green);
+	letter-spacing: 0.08em;
+	user-select: none;
+	opacity: 1;
+	transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+#continue-msg {
+	opacity: 0;
+	transition: opacity 0.6s cubic-bezier(.4,0,.2,1);
+}

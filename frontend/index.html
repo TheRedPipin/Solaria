@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="SOLARIAS - Terminal-style dungeon game">
+  <title>SOLARIAS</title>
+  <link rel="stylesheet" href="index.css">
+  <script src="index.js" defer></script>
+</head>
+<body>
+  <main class="terminal-ui" role="main">
+    <div class="skull-container" aria-hidden="true">
+      <img src="assets/skull.png" alt="Skull ASCII Art" class="skull-img">
+    </div>
+    <div class="title-container">
+      <h1 class="game-title">SOLARIAS<span class="caret" aria-hidden="true"></span></h1>
+      <p class="sub" id="continue-msg" hidden>Press any key</p>
+      <pre id="loading-bar" class="loading-bar" aria-live="polite">[                    ]</pre>
+    </div>
+  </main>
+</body>
+</html>
