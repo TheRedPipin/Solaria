@@ -194,6 +194,22 @@ function displayGoalText(text = 'Find the sun...') {
 }
 
 /**
+ * Open settings modal
+ */
+function openSettings() {
+    const modal = document.getElementById('settingsModal');
+    if (modal) modal.hidden = false;
+}
+
+/**
+ * Close settings modal
+ */
+function closeSettings() {
+    const modal = document.getElementById('settingsModal');
+    if (modal) modal.hidden = true;
+}
+
+/**
  * Initialize the game interface
  */
 function init() {
@@ -202,6 +218,7 @@ function init() {
     // Start background ambience
     const ambienceAudio = document.getElementById('ambienceAudio');
     if (ambienceAudio) {
+        ambienceAudio.volume = 0.5;
         ambienceAudio.play().catch(err => {
             console.log('Audio playback failed:', err);
         });
@@ -216,6 +233,61 @@ function init() {
     // Add event listeners
     elements.typeBtn.addEventListener('click', toggleCommandType);
     elements.promptBox.addEventListener('keydown', handleKeydown);
+    
+    // Settings modal listeners
+    const settingsBtn = document.getElementById('settingsBtn');
+    const closeSettingsBtn = document.getElementById('closeSettingsBtn');
+    const settingsModal = document.getElementById('settingsModal');
+    const volumeSlider = document.getElementById('volumeSlider');
+    const volumeValue = document.getElementById('volumeValue');
+    const ambienceToggle = document.getElementById('ambienceToggle');
+    const resetBtn = document.getElementById('resetBtn');
+    
+    if (settingsBtn) settingsBtn.addEventListener('click', openSettings);
+    if (closeSettingsBtn) closeSettingsBtn.addEventListener('click', closeSettings);
+    if (settingsModal) {
+        settingsModal.addEventListener('click', (e) => {
+            if (e.target === settingsModal) closeSettings();
+        });
+    }
+    
+    // Volume control
+    if (volumeSlider) {
+        volumeSlider.addEventListener('input', (e) => {
+            const volume = e.target.value;
+            if (ambienceAudio) ambienceAudio.volume = volume / 100;
+            if (volumeValue) volumeValue.textContent = volume + '%';
+        });
+    }
+    
+    // Ambience toggle
+    if (ambienceToggle) {
+        ambienceToggle.addEventListener('change', (e) => {
+            if (ambienceAudio) {
+                if (e.target.checked) {
+                    ambienceAudio.play().catch(err => console.log('Audio play failed:', err));
+                } else {
+                    ambienceAudio.pause();
+                }
+            }
+        });
+    }
+    
+    // Reset button
+    if (resetBtn) {
+        resetBtn.addEventListener('click', () => {
+            if (confirm('Are you sure you want to reset the game?')) {
+                location.reload();
+            }
+        });
+    }
+    
+    // Close modal with Escape key
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && !settingsModal.hidden) {
+            closeSettings();
+        }
+    });
     
     // Welcome message
     addMessage('Welcome to SOLARIAS', 'system-message');
