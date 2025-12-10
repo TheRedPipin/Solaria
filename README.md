@@ -39,7 +39,7 @@ Navigate to `localhost:8000/frontend/`
 
 ## What You'll Find
 
-It
+Walls, and walls.
 
 ## Controls
 
