@@ -13,7 +13,7 @@ const locationInformation = {
     },
     2: {
         type: 'start', 
-        description: `Starting Cell\nA dim cell. Cold stone walls press in from all sides...`,
+        description: `Starting Cell\n\nA dim cell. Cold stone walls press in from all sides...`,
         image: {
             src: './assets/images/corridor.png',
             alt: 'Starting Cell',
@@ -22,7 +22,7 @@ const locationInformation = {
     },
     3: {
         type: 'whimpering', 
-        description: `Whimpering Chamber\nA narrow passage stretches before you...`,
+        description: `Whimpering Chamber\n\nThe corridor continues. A soft whimpering echoes...`,
         npc: "whimpering",
         image: () => {
             if (gameState.flags.whimpering_man_helped) {
@@ -33,7 +33,7 @@ const locationInformation = {
     },
     4: {
         type: 'merchant', 
-        description: `Merchant's Chamber\nA vast room. Candles flicker on a table...`,
+        description: `Merchant's Chamber\n\nA vast room. The wall's are lined with strange things, in the center a figure sits behind a table lined with moss.`,
         npc: "merchant",
         image: {
             src: './assets/images/merchant.png',
@@ -43,7 +43,7 @@ const locationInformation = {
     },
     5: {
         type: 'prisoner', 
-        description: `Prison Cell\nA cramped cell. Someone sits against the far wall...`,
+        description: `Prison Cell\n\nA cramped cell. Someone sits against the far wall...`,
         npc: "prisoner",
         image: {
             src: './assets/images/prisoner.png',
@@ -53,7 +53,7 @@ const locationInformation = {
     },
     6: {
         type: 'puzzle', 
-        description: `Sacrificial Chamber\nA stone pedestal dominates the room...`,
+        description: `Sacrificial Chamber\n\nA stone pedestal dominates the room... a large blade protrudes from it's base.`,
         image: () => {
             if (gameState.flags.puzzle_solved) {
                 return { src: './assets/images/sacrificeAfter.png', alt: 'Sacrificial Chamber', glitch: false };
@@ -63,7 +63,7 @@ const locationInformation = {
     },
     7: {
         type: 'circle1', 
-        description: `Endless Corridor\nThe passage curves unnaturally...`,
+        description: `Endless Corridor\n\nThe passage curves unnaturally...`,
         image: {
             src: './assets/images/corridor.png',
             alt: 'Endless Corridor',
@@ -73,7 +73,7 @@ const locationInformation = {
     },
     8: {
         type: 'circle2', 
-        description: `Endless Corridor\nThe passage twists back on itself...`,
+        description: `Endless Corridor\n\nThe passage twists back on itself...`,
         image: {
             src: './assets/images/corridor.png',
             alt: 'Endless Corridor',
@@ -83,7 +83,7 @@ const locationInformation = {
     },
     9: {
         type: 'locked_door', 
-        description: `Sealed Passage\nA heavy door blocks your path...`,
+        description: `Sealed Passage\n\nA heavy door blocks your path...`,
         image: {
             src: './assets/images/lockedDoor.png',
             alt: 'Sealed Door',
