@@ -2,8 +2,8 @@ import { loadSettings, saveSettings } from './modules/core/state.js';
 import { initElements, addMessage, displayGoalText, applySettings, loadViewImage } from './modules/core/ui.js';
 import { createCommandController } from './modules/core/commands.js';
 import { setupSettingsControls } from './modules/core/settings.js';
-import { setMapUpdater, setPlayerInfoUpdater, gameState } from './modules/game/gameState.js';
-import { updateMapDisplay } from './modules/game/map.js';
+import { setMapUpdater, setPlayerInfoUpdater, setViewImageUpdater, gameState, loadTileImage } from './modules/game/gameState.js';
+import { updateMapDisplay, getTile } from './modules/game/map.js';
 import { updatePlayerInfo } from './modules/core/playerInfo.js';
 
 function init() {
@@ -48,11 +48,15 @@ function init() {
 
     setMapUpdater(updateMapDisplay);
     setPlayerInfoUpdater(updatePlayerInfo);
+    setViewImageUpdater(loadViewImage);
     
     setTimeout(() => {
         gameState.flags.visited_tiles = ['6,6'];
         
-        loadViewImage('assets/images/corridor.png', 'Starting Cell');
+        const startTile = getTile(6, 6);
+        if (startTile) {
+            loadTileImage(startTile);
+        }
         
         updateMapDisplay();
         updatePlayerInfo();

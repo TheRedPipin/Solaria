@@ -82,3 +82,27 @@ export function resetGameState() {
     };
 }
 
+let updateViewImage = () => {};
+
+export function setViewImageUpdater(fn) {
+    updateViewImage = fn;
+}
+
+// ...existing code...
+
+export function loadTileImage(tile, forceTransition = false) {
+    if (!tile || !tile.image) {
+        console.warn('No image data for tile:', tile);
+        return;
+    }
+    
+    let imageConfig;
+    if (typeof tile.image === 'function') {
+        imageConfig = tile.image();
+    } else {
+        imageConfig = tile.image;
+    }
+    
+    const { src, alt, glitch } = imageConfig;
+    updateViewImage(src, alt, glitch, forceTransition);
+}

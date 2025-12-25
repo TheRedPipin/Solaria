@@ -1,29 +1,126 @@
+import { gameState } from './gameState.js';
+
 const locationInformation = {
-    0:null,
-    1:{type: 'corridor', description: `More nothing...`},
-    2:{type: 'start', description:`Starting Cell\nA dim cell. Cold stone walls press in from all sides. There's barely enough light to see. A faint dripping can be heared somewhere beyond here.`},
-    3:{type: 'whimpering', description:`Whimpering Chamber\nA narrow passage stretches before you. Water drips somewhere in the darkness.\n\nA hunched figure rocks back and forth in the corner, sobbing quietly.`, npc: "whimpering"},
-    4:{type: 'merchant', description: `Merchant's Chamber\nA vast room. Candles flicker on a table. Behind it sits a figure in tattered robes.`, npc: "merchant"},
-    5:{type: 'prisoner', description: `Prison Cell\nA cramped cell. Someone sits against the far wall, knees drawn up, staring at nothing.`, npc: "prisoner"},
-    6:{type: 'puzzle', description: `Sacrificial Chamber\nA stone pedestal dominates the room. Upon it rests a weathered blade molded to the surface.`},
-    7:{type: 'circle1', description: `Endless Corridor\nThe passage curves unnaturally. Your footsteps echo wrong. The walls seem to breathe.`},
-    8:{type: 'circle2', description: `Endless Corridor\nThe passage twists back on itself. You feel dizzy. Something isn't right here.`},
-    9:{type: 'locked_door', description: `Sealed Passage\nA heavy door blocks your path, bound with chains. Whatever lies beyond is locked away.`},
-    10:{type: 'para', description: `Dead End\nThe passage stops abruptly. Stone blocks your path.\n\nYou feel off.`},
-    11:{type: 'end', description: `The light burns your skin... here it is... the sun!`}
+    0: null,
+    1: {
+        type: 'corridor', 
+        description: `More nothing...`,
+        image: {
+            src: './assets/images/corridor.png',
+            alt: 'Empty Corridor',
+            glitch: false
+        }
+    },
+    2: {
+        type: 'start', 
+        description: `Starting Cell\nA dim cell. Cold stone walls press in from all sides...`,
+        image: {
+            src: './assets/images/corridor.png',
+            alt: 'Starting Cell',
+            glitch: false
+        }
+    },
+    3: {
+        type: 'whimpering', 
+        description: `Whimpering Chamber\nA narrow passage stretches before you...`,
+        npc: "whimpering",
+        image: () => {
+            if (gameState.flags.whimpering_man_helped) {
+                return { src: './assets/images/whimpering_helped.png', alt: 'Quiet Chamber', glitch: false };
+            }
+            return { src: './assets/images/whimpering.png', alt: 'Whimpering Chamber', glitch: true };
+        }
+    },
+    4: {
+        type: 'merchant', 
+        description: `Merchant's Chamber\nA vast room. Candles flicker on a table...`,
+        npc: "merchant",
+        image: {
+            src: './assets/images/merchant.png',
+            alt: 'Merchant\'s Chamber',
+            glitch: true
+        }
+    },
+    5: {
+        type: 'prisoner', 
+        description: `Prison Cell\nA cramped cell. Someone sits against the far wall...`,
+        npc: "prisoner",
+        image: {
+            src: './assets/images/prisoner.png',
+            alt: 'Prison Cell',
+            glitch: true
+        }
+    },
+    6: {
+        type: 'puzzle', 
+        description: `Sacrificial Chamber\nA stone pedestal dominates the room...`,
+        image: () => {
+            if (gameState.flags.puzzle_solved) {
+                return { src: './assets/images/sacrificeAfter.png', alt: 'Sacrificial Chamber', glitch: false };
+            }
+            return { src: './assets/images/sacrificeBefore.png', alt: 'Sacrificial Chamber', glitch: true };
+        }
+    },
+    7: {
+        type: 'circle1', 
+        description: `Endless Corridor\nThe passage curves unnaturally...`,
+        image: {
+            src: './assets/images/corridor.png',
+            alt: 'Endless Corridor',
+            glitch: true
+        },
+        teleportTo: [0,3]
+    },
+    8: {
+        type: 'circle2', 
+        description: `Endless Corridor\nThe passage twists back on itself...`,
+        image: {
+            src: './assets/images/corridor.png',
+            alt: 'Endless Corridor',
+            glitch: true
+        },
+        teleportTo: [0,5]
+    },
+    9: {
+        type: 'locked_door', 
+        description: `Sealed Passage\nA heavy door blocks your path...`,
+        image: {
+            src: './assets/images/lockedDoor.png',
+            alt: 'Sealed Door',
+            glitch: true
+        }
+    },
+    10: {
+        type: 'end', 
+        description: `The light burns your skin... here it is... the sun!`,
+        image: {
+            src: './assets/images/sun.png',
+            alt: 'The Sun',
+            glitch: false
+        }
+    }
+};
+
+export function getTileImage(x, y) {
+    const tile = getTile(x, y);
+    if (!tile?.image) return null;
+    if (typeof tile.image === 'function') {
+        return tile.image();
+    }
+    return tile.image;
 }
 
 const dungeonMap = [
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [1, 1, 1, 1, 1, 1, 1, 1, 4, 0],
     [1, 0, 1, 0, 9, 0, 0, 0, 0, 0],
-    [8, 1, 1, 10, 1, 1, 1, 1, 1, 0],
+    [8, 1, 1, 0, 1, 1, 1, 1, 1, 0],
     [0, 0, 0, 0, 1, 0, 1, 0, 1, 0],
     [7, 1, 1, 0, 1, 0, 3, 0, 1, 6],
     [1, 0, 1, 0, 1, 0, 2, 0, 9, 0],
     [1, 1, 1, 1, 1, 0, 0, 0, 5, 0],
     [0, 0, 0, 0, 9, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 1, 1, 1, 11, 0, 0]
+    [0, 0, 0, 0, 1, 1, 1, 10, 0, 0]
 ];
 
 
@@ -131,7 +228,6 @@ export function getExits(x, y) {
     let possibleExits = [];
     for (const dir of ['north', 'south', 'east', 'west']) {
         const nextCoords = getNextTile(x, y, dir);
-        console.log('Next Coords for', dir, ':', nextCoords);
         if (nextCoords) {
             possibleExits.push(dir);
         }

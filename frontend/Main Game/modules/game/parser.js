@@ -1,5 +1,5 @@
-import { gameState, hasItem, addItem, removeItem, moveToTile, getCurrentPosition, triggerPlayerInfoUpdate } from './gameState.js';
 import { getTile, getNextTile, getExits } from './map.js';
+import { gameState, hasItem, addItem, removeItem, moveToTile, triggerPlayerInfoUpdate, loadTileImage } from './gameState.js';
 import { npcs } from './npcs.js';
 import { loadViewImage } from '../core/ui.js';
 
@@ -72,57 +72,48 @@ function handleMovement(cmd) {
     let direction = cmd.replace(/^(go|move)\s+/, '');
     const dirMap = { n: 'north', s: 'south', e: 'east', w: 'west' };
     direction = dirMap[direction] || direction;
+    
     const nextCoords = getNextTile(gameState.x, gameState.y, direction);
     if (!nextCoords) {
-        return "You can't go that way. The passage is blocked by stone.";
+        return "You can't go that way.";
     }
+    
     const nextTile = getTile(nextCoords.x, nextCoords.y);
+    
     if (nextTile && nextTile.type === 'locked_door' && !hasItem('skeleton_key')) {
-        return "A heavy door blocks your path, bound with chains. You need a key to proceed.";
+        loadTileImage(nextTile, true);
+        return "The door is sealed. Heavy chains bind it shut. You'll need a key.";
     }
-    else if (nextTile && nextTile.type === 'circle1') {
-        moveToTile(0, 3);
-        nextTile = getTile(0, 3);
-        loadViewImage('./assets/images/corridor.png', 'Corridor', false, true);
-        const description = nextTile.description;
-        const exitsText = getExitsText();
-        return `You move ${direction}.\n\nYour body becomes light before quickly returning to normal...\n\n${description}\n\n${exitsText}`;
+    
+    if (nextTile && nextTile.type === 'locked_door' && hasItem('skeleton_key')) {
+        loadTileImage(nextTile, true);
+        return "You unlock the door with the skeleton key. The chains fall away with a metallic clang.";
     }
-    else if (nextTile && nextTile.type === 'circle2') {
-        moveToTile(0, 5);
-        nextTile = getTile(0, 5);
-        loadViewImage('./assets/images/corridor.png', 'Corridor', false, true);
-        const description = nextTile.description;
-        const exitsText = getExitsText();
-        return `You move ${direction}.\n\nYour body becomes light before quickly returning to normal...\n\n${description}\n\n${exitsText}`;
-    }
-    if (nextTile) {
-        switch (nextTile.type) {
-            case 'whimpering':
-                loadViewImage('./assets/images/whimpering.png', 'Whimpering Chamber', true, true);
-                break;
-            case 'locked_door':
-                loadViewImage('./assets/images/lockedDoor.png', 'Sealed Door', true, true);
-                break;
-            case 'para':
-                loadViewImage('./assets/images/deadend.png', 'Dead End', true, true);
-                break;
-            case 'puzzle':
-                if (gameState.flags.puzzle_solved) {
-                    loadViewImage('./assets/images/sacrificeAfter.png', 'Sacrificial Chamber', true, true);
-                } else {
-                    loadViewImage('./assets/images/sacrificeBefore.png', 'Sacrificial Chamber', true, true);
-                }
-                break;
-            default:
-                loadViewImage('./assets/images/corridor.png', 'Corridor', false, true);
-                break;
+    
+    if (nextTile && (nextTile.type === 'circle1' || nextTile.type === 'circle2')) {
+        loadTileImage(nextTile, true);
+        if (nextTile.teleportTo) {
+            const [teleX, teleY] = nextTile.teleportTo;
+            moveToTile(teleX, teleY);
+            const teleTile = getTile(teleX, teleY);
+            if (teleTile) {
+                loadTileImage(teleTile, true);
+            }
+            return `As you step into the corridor, the world warps around you...\n\nYou find yourself in a different part of the labyrinth.`;
         }
     }
-    const description = nextTile.description;
-    moveToTile(nextCoords.x, nextCoords.y);
-    const exitsText = getExitsText();
-    return `You move ${direction}.\n\n${description}\n\n${exitsText}`;
+    
+    if (nextTile) {
+        moveToTile(nextCoords.x, nextCoords.y);
+        loadTileImage(nextTile, true);
+        
+        const description = nextTile.description;
+        const exitsText = getExitsText();
+        
+        return `You move ${direction}.\n\n${description}\n\n${exitsText}`;
+    }
+    
+    return "You can't go that way.";
 }
 
 function handleLook(currentTile) {
@@ -134,7 +125,6 @@ function handleLook(currentTile) {
 
 function getExitsText() {
     const directionExits = getExits(gameState.x, gameState.y);
-    console.log(directionExits);
     if (!directionExits) return "You can go: nowhere";
     
     const arrows = {

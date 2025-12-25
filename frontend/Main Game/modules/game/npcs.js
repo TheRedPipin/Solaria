@@ -1,5 +1,3 @@
-import { gameState, hasItem, addItem, removeItem, triggerPlayerInfoUpdate } from './gameState.js';
-
 export const npcs = {
     "whimpering": {
         name: "Whimpering Man",
